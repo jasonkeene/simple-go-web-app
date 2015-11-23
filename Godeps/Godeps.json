@@ -11,6 +11,10 @@
 			"ImportPath": "github.com/go-martini/martini",
 			"Comment": "v1.0-58-gbd8578f",
 			"Rev": "bd8578f41c9b53278c4ada731fe5beac03f80d77"
+		},
+		{
+			"ImportPath": "github.com/pivotal-golang/bytefmt",
+			"Rev": "eb6a478daea5cd564c230719240761a1a2ccc713"
 		}
 	]
 }
