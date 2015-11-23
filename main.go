@@ -5,8 +5,10 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"syscall"
 
 	"github.com/go-martini/martini"
+	"github.com/pivotal-golang/bytefmt"
 )
 
 func main() {
@@ -27,6 +29,15 @@ func main() {
 		}
 		rw.Header().Add("Content-Type", "application/json")
 		return 200, bytes
+	})
+	m.Get("/disk", func() (int, string) {
+		var stat syscall.Statfs_t
+		err := syscall.Statfs("/", &stat)
+		if err != nil {
+			return 500, "Unable to stat root filesystem."
+		}
+		bytes := stat.Blocks * uint64(stat.Bsize)
+		return 200, bytefmt.ByteSize(bytes)
 	})
 	m.Run()
 }
