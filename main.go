@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"os/exec"
+	"runtime"
 	"syscall"
 
 	"github.com/go-martini/martini"
@@ -46,6 +47,9 @@ func main() {
 			return 500, fmt.Sprintf("Unable to df -h: %s", err.Error())
 		}
 		return 200, string(out)
+	})
+	m.Get("/version", func() string {
+		return fmt.Sprintf("%s\n", runtime.Version())
 	})
 	m.Run()
 }
