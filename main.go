@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"os/exec"
 	"syscall"
 
 	"github.com/go-martini/martini"
@@ -37,7 +38,14 @@ func main() {
 			return 500, "Unable to stat root filesystem."
 		}
 		bytes := stat.Blocks * uint64(stat.Bsize)
-		return 200, bytefmt.ByteSize(bytes)
+		return 200, fmt.Sprintf("%s\n", bytefmt.ByteSize(bytes))
+	})
+	m.Get("/df", func() (int, string) {
+		out, err := exec.Command("df", "-h").Output()
+		if err != nil {
+			return 500, fmt.Sprintf("Unable to df -h: %s", err.Error())
+		}
+		return 200, string(out)
 	})
 	m.Run()
 }
